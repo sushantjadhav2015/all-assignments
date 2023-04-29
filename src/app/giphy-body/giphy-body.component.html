@@ -1,0 +1,10 @@
+<div class="gifs">
+  <div class="gif" *ngFor="let gif of data | paginate: { itemsPerPage: itemPerPage, currentPage: p }">
+    <img [src]="gif.images.downsized.url" alt="">
+  </div>
+
+
+  <div class="mt-8 py-5 flex justify-center item-center">
+    <pagination-controls (pageChange)="p=$event"></pagination-controls>
+  </div>
+</div>
