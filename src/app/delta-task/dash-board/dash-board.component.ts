@@ -45,36 +45,41 @@ export class DashBoardComponent implements OnInit {
   deleteData(id: string) {
     console.log(id);
 
-    const url = `https://devrunner.co.in/machine_test/index.php/web_api/Users/remove_user/${id}`;
+    const url = `https://devrunner.co.in/machine_test/index.php/web_api/Users/remove_user/`;
 
-    var result = confirm("want to delete");
+    var result = confirm("Do you want to delete");
     if (id && result) {
       const user = this.userArray.map((x) => x.id === id);
 
       if (!user) return;
 
-      this.http.delete(url).subscribe(() => {
-        alert("remove successfully");
-        this.allUserData();
-      });
+      let data = {
+        user_id: id,
+      };
+      this.http
+        .request("DELETE", url + "remove_user", { body: data })
+        .subscribe((res) => {
+          alert("remove successfully");
+          this.allUserData();
+        });
     }
   }
 
   updateData(user: any) {
+    console.log(user);
+
     const updateData = {
-      user_id:user.user_id,
+      user_id: user.user_id,
       user_name: user.user_name,
       user_email: user.user_email,
-      user_phone_no: user.user_phone_no,
-      user_pwd: user.user_pwd,
+      user_contact_no: user.user_phone_no,
+      user_password: user.user_pwd,
       user_gender: user.user_gender,
     };
 
     console.log(updateData);
-    
-    this.http
-      .put(`https://devrunner.co.in/machine_test/index.php/web_api/Users/update_user`, updateData)
-      .subscribe(
+
+    this.http.put(`https://devrunner.co.in/machine_test/index.php/web_api/Users/update_user`,updateData).subscribe(
         (response) => {
           console.log("Data Updated", response);
           user.isEdit = false;
@@ -83,5 +88,14 @@ export class DashBoardComponent implements OnInit {
           console.log(`Error occurse`, error);
         }
       );
+  }
+
+  cancel(user:any){
+    user.isEdit = false;
+    this.allUserData();
+  }
+
+  logout(){
+    this.deltaService.logout()
   }
 }

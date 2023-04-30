@@ -21,16 +21,11 @@
       <mat-card-content>
         <mat-form-field>
           <mat-label>Enter your password</mat-label>
-          <input formControlName="user_pwd" matInput [type]="hide ? 'password' : 'text'">
-          <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
-            [attr.aria-pressed]="hide">
-            <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
-          </button>
+          <input formControlName="user_pwd" matInput>
           <mat-error
             *ngIf="loginForm.get('user_pwd').invalid && (loginForm.get('user_pwd').dirty || loginForm.get('user_pwd').touched)">
             <span *ngIf="loginForm.get('user_pwd').errors.required">password is required.</span>
           </mat-error>
-
         </mat-form-field>
       </mat-card-content>
 

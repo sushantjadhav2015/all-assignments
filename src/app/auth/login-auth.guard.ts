@@ -1,17 +1,21 @@
-import { Injectable } from "@angular/core";
-import {
-  ActivatedRouteSnapshot,
-  CanActivate,
-  RouterStateSnapshot,
-  UrlTree,
-} from "@angular/router";
-import { Observable } from "rxjs";
+ 
+
+import { Injectable } from '@angular/core';
+import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { DeltaServiceService } from '../services/delta-service.service';
 
 @Injectable({
-  providedIn: "root",
+  providedIn: 'root'
 })
 export class LoginAuthGuard implements CanActivate {
-  canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean | UrlTree | Observable<boolean | UrlTree> | Promise<boolean | UrlTree> {
-    return true;
+  constructor( private router: Router, private deltaService:DeltaServiceService) { }
+
+  canActivate(next: ActivatedRouteSnapshot, state: RouterStateSnapshot) {
+    if (this.deltaService.isLoggedIn()) {
+      return true;
+    } else {
+      this.router.navigate(['/login']);
+      return false;
+    }
   }
 }

@@ -1,33 +1,4 @@
-<button type="button" class="btn btn-info" routerLink="/login">Back to Home</button>
-<!-- <table class="table">
-  <thead class="thead-dark">
-    <tr>
-      <th scope="col">Sr. No</th>
-      <th scope="col">User Id</th>
-      <th scope="col">Name</th>
-      <th scope="col">Email Id</th>
-      <th scope="col">Contact</th>
-      <th scope="col">password</th>
-      <th scope="col">Gender</th>
-      <th scope="col">Edit</th>
-      <th scope="col">Delete</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let user of userArray; let i =index">
-      <th scope="row">{{i+1}}</th>
-      <td>{{user.user_id}}</td>
-      <td>{{user.user_name}}</td>
-      <td>{{user.user_email}}</td>
-      <td>{{user.user_phone_no}}</td>
-      <td>{{user.user_pwd}}</td>
-      <td>{{user.user_gender}}</td>
-      <td><button type="button" class="btn btn-success" (click)="editData(user.id)">Edit</button></td>
-      <td><button type="button" class="btn btn-danger" (click)="deleteData(user.id)">Delete</button></td>
-    </tr>
-  </tbody>
-</table>
- -->
+<button type="button" class="btn btn-info" routerLink="/login" (click)="logout()">Logout</button>
 
 <!-- inline editing -->
 <div class="row">
@@ -87,13 +58,11 @@
           <td style="width: 20%;" class="text-center">
             <div *ngIf="user.isEdit">
               <button class="btn btn-sm btn-success" (click)="updateData(user)">Update</button>
-              <button class="btn btn-sm btn-info" (click)="user.isEdit = false">Cancel</button>
+              <button class="btn btn-sm btn-info" (click)="cancel(user)">Cancel</button>
             </div>
             <div *ngIf="!user.isEdit">
-              <button class="btn btn-sm btn-success" (click)="onEdit(user)">Edit</button>
-            </div>
-            <div>
-              <button  class="btn btn-sm btn-danger" (click)="deleteData(user.user_id)">Delete</button>
+              <button class="btn btn-sm btn-success md-2" (click)="onEdit(user)">Edit</button>
+              <button class="btn btn-sm btn-danger md-2" (click)="deleteData(user.user_id)">Delete</button>
             </div>
           </td>
         </tr>

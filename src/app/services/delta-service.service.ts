@@ -1,13 +1,13 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs/internal/Observable";
+import { Router } from "@angular/router";
+import { map } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",
 })
 export class DeltaServiceService {
-  jsonUrl =
-    "https://devrunner.co.in/machine_test/index.php/web_api/Users/Register";
+  jsonUrl = "https://devrunner.co.in/machine_test/index.php/web_api/Users/";
 
   // httpOptions = {
   //   headers: new HttpHeaders({
@@ -16,7 +16,7 @@ export class DeltaServiceService {
   //   }),
   // };
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private router: Router) {}
 
   register(data: any) {
     return this.http.post(this.jsonUrl, data);
@@ -26,16 +26,47 @@ export class DeltaServiceService {
     return this.http.get(this.jsonUrl);
   }
 
-  update(Id: any, data: any): Observable<any> {
-    const neweditUrl = `${this.jsonUrl}/${Id}`;
-    return this.http.put(neweditUrl, data);
-  }
-
-
   delete(id: any) {
     const newUrl = `${this.jsonUrl}/${id}`;
     return this.http.delete(newUrl, id);
   }
 
+  // login(email, password) {
+  //   this.getUsers()
+  //   let par = {
+  //     user_email: email,
+  //     user_pwd: password,
+  //   };
+  //   return this.http.get(this.jsonUrl + "login", { params: par });
+  // }
 
+  login(email, password) {
+    this.getUsers();
+    let par = {
+      user_email: email,
+      user_pwd: password,
+    };
+
+    return this.http.get<any>(this.jsonUrl + "login", { params: par }).pipe(
+      map((response) => {
+        if (response.message === "Login Successfull") {
+          localStorage.setItem("token", response.data[0].token);
+          this.router.navigate(["/dashBoard"]);
+        }
+        return response;
+      })
+    );
+  }
+
+  logout() {
+    localStorage.removeItem("token");
+  }
+
+  getToken() {
+    return localStorage.getItem("token");
+  }
+
+  isLoggedIn() {
+    return this.getToken() !== null;
+  }
 }

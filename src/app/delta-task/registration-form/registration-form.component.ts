@@ -1,6 +1,8 @@
+
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Component, OnInit } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { Router } from "@angular/router";
 import { DeltaServiceService } from "src/app/services/delta-service.service";
 
 @Component({
@@ -12,7 +14,8 @@ export class RegistrationFormComponent implements OnInit {
   constructor(
     private fb: FormBuilder,
     private deltaService: DeltaServiceService,
-    private http: HttpClient
+    private http: HttpClient,
+    private route:Router
   ) {}
 
   hide = true;
@@ -26,29 +29,34 @@ export class RegistrationFormComponent implements OnInit {
   createForm() {
     this.registrationForm = this.fb.group({
       user_name: ["", Validators.required],
-      // user_email: ["", [Validators.required, Validators.email]],
-      // user_phone_no: ["", [Validators.required, Validators.maxLength(10)]],
-      // user_pwd: ["", Validators.required],
-      // user_gender: ["", Validators.required],
-      // this.registrationForm = this.fb.group({
+      user_email: ["", [Validators.required, Validators.email]],
+      user_contact_no: ["", [Validators.required, Validators.maxLength(10)]],
+      user_password: ["", Validators.required],
+      user_gender: ["", Validators.required],
     });
   }
 
   onSubmit() {
     console.log(this.registrationForm.value);
-    const formData = new HttpParams()
-      .set('user_name', this.registrationForm.value.user_name)
-      .set('user_email', this.registrationForm.value.user_email)
-      .set('user_phone_no', this.registrationForm.value.user_phone_no)
-      .set('user_pwd', this.registrationForm.value.user_pwd)
-      .set('user_gender', this.registrationForm.value.user_gender);
+    const user=this.registrationForm.value;
+    let formData=new FormData();
+    formData.append("user_name",this.registrationForm.get('user_name').value);
+    formData.append("user_email",this.registrationForm.get('user_email').value);
+    formData.append("user_contact_no",this.registrationForm.get('user_contact_no').value);
+    formData.append("user_password",this.registrationForm.get('user_password').value);
+    formData.append("user_gender",this.registrationForm.get('user_gender').value);
 
 
-
-    this.deltaService.register(formData).subscribe((res) => {
-      console.log(res);
-    });
+    this.http.post('https://devrunner.co.in/machine_test/index.php/web_api/Users/Register',formData).subscribe(
+      (response) => {
+        console.log(response);
+        alert("Account created")
+        this.route.navigate(["/login"]);
+      },
+      (error) => {
+        console.log(error);
+        alert("Something was wrong")
+      }
+    );
   }
-
-
 }
